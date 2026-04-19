@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Global News</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="logo"><h1>Contact<span>Us</span></h1></div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="politics.html">Politics</a></li>
+                    <li><a href="sport.html">Sport</a></li>
+                    <li><a href="tech.html">Tech</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-content container">
+        <div class="news-card">
+            <div class="content">
+                <h2>Send a Message</h2>
+                <form action="https://formspree.io/f/xreygdyp" method="POST">
+                    <input type="text" name="name" placeholder="Full Name" required>
+                    <input type="email" name="_replyto" placeholder="Your Email" required>
+                    <textarea name="message" rows="5" placeholder="Write your message here..." required></textarea>
+                    <button type="submit" class="btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2026 Global News</p></footer>
+</body>
+</html>
