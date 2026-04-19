@@ -1,59 +1,26 @@
-// script.js - Global News Engine
+const API_KEY = '9c2871e99006fe13a24acda0c16db520';
 
-// 1. የዜና ምንጩን ለመክፈት የሚያገለግል ልዩ ቁልፍ (API KEY)
-const API_KEY = '7444e7725ca54f52b7c1c429e08d3177';
-
-// 2. ዜናውን ከኢንተርኔት የሚጎትተው ዋና ተግባር
 async function fetchNews() {
     const container = document.getElementById('news-container');
-    
-    // በገጹ ላይ የዜና ማስቀመጫ ቦታ ከሌለ (ለምሳሌ About ገጽ ላይ) ስራውን ያቆማል
-    if (!container) return;
 
     let path = window.location.pathname;
-    let url;
+    let category = 'general';
 
-    // 3. ገጹን በመለየት ትክክለኛውን የዜና ዘርፍ መምረጥ
-    
-    // ስፖርት ገጽ ከሆነ - የእግር ኳስ ዜናዎችን (Football/Soccer) እንዲፈልግ
-    if (path.includes('sport.html')) {
-        url = `https://newsapi.org/v2/everything?q=football+OR+soccer+OR+premierleague&language=en&sortBy=publishedAt&apiKey=${API_KEY}`;
-    } 
-    // የቴክኖሎጂ ገጽ ከሆነ
-    else if (path.includes('tech.html')) {
-        url = `https://newsapi.org/v2/top-headlines?country=us&category=technology&apiKey=${API_KEY}`;
-    } 
-    // የፖለቲካ ገጽ ከሆነ
-    else if (path.includes('politics.html')) {
-        url = `https://newsapi.org/v2/top-headlines?country=us&category=politics&apiKey=${API_KEY}`;
-    } 
-    // ለዋናው ገጽ (Home) - አጠቃላይ አለም አቀፍ ዜናዎች
-    else {
-        url = `https://newsapi.org/v2/top-headlines?country=us&category=general&apiKey=${API_KEY}`;
-    }
+    if (path.includes('sport.html')) category = 'sports';
+    else if (path.includes('tech.html')) category = 'technology';
+    else if (path.includes('politics.html')) category = 'world';
+
+    const url = 'https://gnews.io/api/v4/top-headlines?category=' + category + '&lang=en&country=us&max=10&apikey=' + API_KEY;
 
     try {
-        // 4. መረጃውን ከ NewsAPI መውሰድ
         const response = await fetch(url);
         const data = await response.json();
         
         if (data.articles && data.articles.length > 0) {
-            container.innerHTML = ''; // "Loading" የሚለውን ጽሁፍ ለማጥፋት
-            
-            // 5. እያንዳንዱን ዜና ወደ HTML ካርድ መቀየር
+            container.innerHTML = '';
             data.articles.forEach(article => {
-                // ምስልና ርዕስ ያላቸውን ዜናዎች ብቻ ለይቶ ያወጣል
-                if (article.urlToImage && article.title) {
-                    const newsCard = `
-                        <div class="news-card">
-                            <img src="${article.urlToImage}" alt="News Image">
-                            <div class="content">
-                                <h3>${article.title}</h3>
-                                <p>${article.description || 'Visit the website for more details.'}</p>
-                                <a href="${article.url}" target="_blank" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    `;
+                if (article.image && article.title) {
+                    const newsCard = '<div class="news-card"><img src="' + article.image + '" alt="News Image"><div class="content"><h3>' + article.title + '</h3><p>' + (article.description || 'Visit site for more details.') + '</p><a href="' + article.url + '" target="_blank" class="btn">Read More</a></div></div>';
                     container.innerHTML += newsCard;
                 }
             });
@@ -61,11 +28,7 @@ async function fetchNews() {
             container.innerHTML = "<p style='text-align:center;'>No news found at the moment.</p>";
         }
     } catch (error) {
-        // 6. ኢንተርኔት ከሌለ ወይም ስህተት ከተፈጠረ የሚወጣ መልእክት
-        console.error("Error fetching news:", error);
-        container.innerHTML = "<p style='text-align:center;'>Failed to load news. Please check your internet connection.</p>";
+        container.innerHTML = "<p style='text-align:center;'>Failed to load news.</p>";
     }
 }
-
-// 7. ገጹ እንደተከፈተ ስራውን እንዲጀምር መጥራት
 fetchNews();
